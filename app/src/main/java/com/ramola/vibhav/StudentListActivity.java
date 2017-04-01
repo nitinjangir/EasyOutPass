@@ -1,9 +1,12 @@
 package com.ramola.vibhav;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -27,6 +30,9 @@ public class StudentListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("EasyOutPass");
         recyclerView = (RecyclerView) findViewById(R.id.list);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         adapter = new StudentAdapter(this);
@@ -35,7 +41,15 @@ public class StudentListActivity extends AppCompatActivity {
         getDetail();
 
 
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
 
+        }
+        else
+        {
+            Intent i =new Intent(StudentListActivity.this,ServerSide.class);
+            startService(i);
+        }
     }
 
     private void getDetail(){

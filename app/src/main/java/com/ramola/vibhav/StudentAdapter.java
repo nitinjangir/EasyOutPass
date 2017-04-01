@@ -54,7 +54,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.viewHold
                 holder.userRoomNo.setText(student.getRoomNo());
             if(student.getRollNo()!=null)
                 holder.userRollNo.setText(student.getRollNo());
-            Glide.with(context).load(student.getPicUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.userPic);
+            Glide.with(context).load(student.getPicUrl()).placeholder(R.drawable.female).error(R.drawable.female).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.userPic);
         }
     }
 

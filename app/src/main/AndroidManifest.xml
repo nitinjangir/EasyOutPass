@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".UpdateStudentActivity"></activity>
+        <activity android:name=".UpdateStudentActivity"/>
     </application>
 
 </manifest>

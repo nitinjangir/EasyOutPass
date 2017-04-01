@@ -1,7 +1,8 @@
 package com.ramola.vibhav;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -11,8 +12,6 @@ import com.ramola.vibhav.Model.Student;
 import com.ramola.vibhav.Model.StudentListResponse;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,6 +22,8 @@ public class StudentListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private StudentAdapter adapter;
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +35,8 @@ public class StudentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         getDetail();
 
-
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
 
     }
 
@@ -56,11 +58,5 @@ public class StudentListActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
-    }
-
-    private int getMidnightTime(){
-        int midTime =0;
-
-        return midTime;
     }
 }

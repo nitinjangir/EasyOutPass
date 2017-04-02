@@ -38,6 +38,7 @@ public class ClientThread extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG,"reciecve");
         if(intent.hasExtra(ADDRESS)) {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothSocket bluetoothSocket = null;
@@ -78,24 +79,15 @@ public class ClientThread extends IntentService {
 
 
     private  void  recieveData(InputStream inputStream){
+        byte[] buffer = new byte[1024];
+        int bytes;
         while (true){
-            ByteArrayOutputStream result = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int length;
             try {
-                Log.d(TAG,"Data is Recieving");
-                while ((length = inputStream.read(buffer)) != -1) {
-                    result.write(buffer, 0, length);
-                }
-
-                try {
-                    Log.d(TAG, result.toString("UTF-8"));
-                    Intent i =new Intent(Rfidreceiver.RFidrecrive);
-                    i.putExtra(Rfidreceiver.Rfid,result.toString("UTF-8"));
-                    sendBroadcast(i);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                bytes = inputStream.read(buffer);
+                String strReceived = new String(buffer, 0, bytes);
+                Intent i =new Intent(Rfidreceiver.RFidrecrive);
+                i.putExtra(Rfidreceiver.Rfid,strReceived);
+                sendBroadcast(i);
             } catch (IOException e) {
                 e.printStackTrace();
             }

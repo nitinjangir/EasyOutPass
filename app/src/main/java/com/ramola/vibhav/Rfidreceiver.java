@@ -24,9 +24,32 @@ public class Rfidreceiver extends BroadcastReceiver {
         switch (intent.getAction())
         {
             case RFidrecrive:
-                notificationManager.cancel(UPLOAD_ID);
-                Log.d("Recievie","Rfid Recieved");
-                builder.setContentTitle("The Given RFID IS RECIEVED  "+intent.getStringExtra(Rfid));
+                String resultLocation = "";
+                String data=intent.getStringExtra(Rfid);
+                String location = data.trim().substring(Math.max(data.trim().length() - 2, 0));
+                if(location.equalsIgnoreCase("03")){
+                    resultLocation = "Library";
+                }
+                else if(location.equalsIgnoreCase("04")){
+                    resultLocation = "Home";
+                }
+                else if(location.equalsIgnoreCase("05")){
+                    resultLocation = "Nescafe";
+                }
+                else if(location.equalsIgnoreCase("06")){
+                    resultLocation = "CC";
+                }
+                else if(location.equalsIgnoreCase("07")){
+                    resultLocation = "OAT";
+                }
+                else if(location.equalsIgnoreCase("01")){
+                    resultLocation = "MARKET";
+                }
+                else if(location.equalsIgnoreCase("02")){
+                    resultLocation = "SBI";
+                }
+
+                builder.setContentTitle("RFID "+resultLocation);
                 builder.setSmallIcon(R.drawable.female);
                 notificationManager.notify(UPLOAD_ID,builder.build());
                 break;

@@ -31,6 +31,7 @@ public class BluetoothDeviceActivity extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
                 Intent i =new Intent(BluetoothDeviceActivity.this,ClientThread.class);
                 i.putExtra(ClientThread.ADDRESS,list.get(position).getAddress());
                 startService(i);

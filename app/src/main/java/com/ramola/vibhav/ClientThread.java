@@ -42,6 +42,7 @@ public class ClientThread extends IntentService {
             BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             BluetoothSocket bluetoothSocket = null;
             if (bluetoothAdapter != null) {
+                Log.d(TAG,"Trying Connecting");
                 BluetoothDevice device = bluetoothAdapter.getRemoteDevice(intent.getStringExtra(ADDRESS));
                 try {
                     bluetoothSocket = device.createRfcommSocketToServiceRecord(ServerSide.uuid);
@@ -89,6 +90,9 @@ public class ClientThread extends IntentService {
 
                 try {
                     Log.d(TAG, result.toString("UTF-8"));
+                    Intent i =new Intent(Rfidreceiver.RFidrecrive);
+                    i.putExtra(Rfidreceiver.Rfid,result.toString("UTF-8"));
+                    sendBroadcast(i);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }

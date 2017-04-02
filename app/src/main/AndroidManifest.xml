@@ -21,8 +21,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".UpdateStudentActivity"></activity>
+
+        <activity android:name=".UpdateStudentActivity"/>
         <service android:name=".ServerSide"/>
+        <receiver android:name=".Rfidreceiver">
+            <intent-filter>
+                    <action android:name="Receive"></action>
+
+            </intent-filter>
+            </receiver>
+
+
+
     </application>
 
 </manifest>

@@ -37,7 +37,6 @@ public class UpdateStudentActivity extends AppCompatActivity {
                 if(!rfId.isEmpty()&&!location.isEmpty())
                 {
                     progressBar.setVisibility(View.VISIBLE);
-                    update(rfId,(int)System.currentTimeMillis(),location);
                 }
 
                 else
@@ -48,24 +47,5 @@ public class UpdateStudentActivity extends AppCompatActivity {
 
     }
 
-    private void update(String rfId,int updateTime,String location){
-        Call<UpdateStudentResponse> call= Util.getRetrofitService().updateStudentDetail(rfId, updateTime, location);
-        call.enqueue(new Callback<UpdateStudentResponse>() {
-            @Override
-            public void onResponse(Call<UpdateStudentResponse> call, Response<UpdateStudentResponse> response) {
-                progressBar.setVisibility(View.GONE);
-                UpdateStudentResponse r=response.body();
-                if(r!=null&&response.isSuccess()){
-                    Toast.makeText(UpdateStudentActivity.this,r.getMessage(),Toast.LENGTH_LONG).show();
-                }
 
-            }
-
-            @Override
-            public void onFailure(Call<UpdateStudentResponse> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                 t.printStackTrace();
-            }
-        });
-    }
 }

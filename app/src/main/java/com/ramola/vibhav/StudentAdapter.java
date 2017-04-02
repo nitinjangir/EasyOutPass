@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ramola.vibhav.Model.Student;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by sahil on 30/3/17.
@@ -54,6 +55,25 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.viewHold
                 holder.userRoomNo.setText(student.getRoomNo());
             if(student.getRollNo()!=null)
                 holder.userRollNo.setText(student.getRollNo());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(student.getWhenIn()*1000);
+            holder.inTime.setVisibility(View.GONE);
+            holder.outTime.setVisibility(View.GONE);
+
+            int mYear = calendar.get(Calendar.YEAR);
+            int mMonth = calendar.get(Calendar.MONTH);
+            int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+            holder.inTime.setText(mDay+"/"+mMonth+"/"+mYear);
+
+            Calendar calendarOut = Calendar.getInstance();
+            calendarOut.setTimeInMillis(student.getWhenIn()*1000);
+
+            int mYearOut = calendarOut.get(Calendar.YEAR);
+            int mMonthOut = calendarOut.get(Calendar.MONTH);
+            int mDayOut = calendarOut.get(Calendar.DAY_OF_MONTH);
+
+            holder.outTime.setText(mDayOut+"/"+mMonthOut+"/"+mYearOut);
             Glide.with(context).load(student.getPicUrl()).placeholder(R.drawable.female).error(R.drawable.female).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.userPic);
         }
     }
@@ -66,7 +86,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.viewHold
     public static class viewHolder extends RecyclerView.ViewHolder{
 
         private ImageView userPic;
-        private TextView userName,userRollNo, userRoomNo;
+        private TextView userName,userRollNo, userRoomNo,inTime,outTime;
         private CardView cardView;
         public viewHolder(View itemView) {
             super(itemView);
@@ -75,6 +95,8 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.viewHold
             userName = (TextView) itemView.findViewById(R.id.userName);
             userRollNo = (TextView) itemView.findViewById(R.id.userRollNo);
             userRoomNo = (TextView) itemView.findViewById(R.id.userRoomNo);
+            inTime = (TextView) itemView.findViewById(R.id.inTime);
+            outTime = (TextView) itemView.findViewById(R.id.outTime);
         }
     }
 }

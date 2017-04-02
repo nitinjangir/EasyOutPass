@@ -6,6 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.ramola.vibhav.Model.UpdateStudentResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by spider on 2/4/17.
@@ -24,9 +32,12 @@ public class Rfidreceiver extends BroadcastReceiver {
         switch (intent.getAction())
         {
             case RFidrecrive:
-                String resultLocation = "";
+                String resultLocation = "", resultRFID="";
                 String data=intent.getStringExtra(Rfid);
+                Log.d("data1234567890",data);
                 String location = data.trim().substring(Math.max(data.trim().length() - 2, 0));
+                if(data.trim().length()>0)
+                resultRFID = data.trim().substring(0,data.trim().length()-2).trim();
                 if(location.equalsIgnoreCase("03")){
                     resultLocation = "Library";
                 }
@@ -48,11 +59,35 @@ public class Rfidreceiver extends BroadcastReceiver {
                 else if(location.equalsIgnoreCase("02")){
                     resultLocation = "SBI";
                 }
+                else if(location.equalsIgnoreCase("00")){
+                    resultLocation = "HOSTEL";
+                }
 
-                builder.setContentTitle("RFID "+resultLocation);
+                builder.setContentTitle("DESTINATION "+resultLocation);
                 builder.setSmallIcon(R.drawable.female);
+                update(context,resultRFID,(int)System.currentTimeMillis(),resultLocation);
                 notificationManager.notify(UPLOAD_ID,builder.build());
                 break;
         }
+    }
+
+    private void update(final Context context, String rfId, int updateTime, String location){
+        Call<UpdateStudentResponse> call= Util.getRetrofitService().updateStudentDetail(rfId, updateTime, location);
+        call.enqueue(new Callback<UpdateStudentResponse>() {
+            @Override
+            public void onResponse(Call<UpdateStudentResponse> call, Response<UpdateStudentResponse> response) {
+
+                UpdateStudentResponse r=response.body();
+                if(r!=null&&response.isSuccess()){
+                    Toast.makeText(context,r.getMessage(),Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<UpdateStudentResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }

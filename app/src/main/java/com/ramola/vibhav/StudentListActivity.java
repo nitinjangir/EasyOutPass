@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +24,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StudentListActivity extends AppCompatActivity {
+public class StudentListActivity extends AppCompatActivity implements  SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private StudentAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,14 @@ public class StudentListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("EasyOutPass");
         recyclerView = (RecyclerView) findViewById(R.id.list);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         adapter = new StudentAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         getDetail();
 
+        swipeRefreshLayout.setOnRefreshListener(this);
 
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -63,6 +67,9 @@ public class StudentListActivity extends AppCompatActivity {
         call.enqueue(new Callback<StudentListResponse>() {
             @Override
             public void onResponse(Call<StudentListResponse> call, Response<StudentListResponse> response) {
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 progressBar.setVisibility(View.GONE);
                 StudentListResponse r=response.body();
                 if(r!=null&&response.isSuccess()){
@@ -74,6 +81,9 @@ public class StudentListActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<StudentListResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }
@@ -108,4 +118,8 @@ public class StudentListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRefresh() {
+        getDetail();
+    }
 }

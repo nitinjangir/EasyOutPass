@@ -1,10 +1,14 @@
 package com.ramola.vibhav;
 
-import android.app.AlertDialog;
+
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -22,12 +26,14 @@ public class StudentListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private StudentAdapter adapter;
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("EasyOutPass");
         recyclerView = (RecyclerView) findViewById(R.id.list);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         adapter = new StudentAdapter(this);
@@ -35,9 +41,17 @@ public class StudentListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         getDetail();
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
 
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+
+        }
+        else
+        {
+            Intent i =new Intent(StudentListActivity.this,ServerSide.class);
+            startService(i);
+        }
     }
 
     private void getDetail(){

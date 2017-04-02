@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public class ServerSide extends IntentService {
     public static final String SERVER_NAME="EasyOutPass";
-    private static final UUID uuid
+    public static final UUID uuid
             =
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BluetoothServerSocket bluetoothServerSocket;

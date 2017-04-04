@@ -1,10 +1,17 @@
 package com.ramola.vibhav;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -65,13 +72,13 @@ public class Rfidreceiver extends BroadcastReceiver {
 
                 builder.setContentTitle("DESTINATION "+resultLocation);
                 builder.setSmallIcon(R.drawable.female);
-                update(context,resultRFID,(int)System.currentTimeMillis(),resultLocation);
+                update(context,resultRFID,System.currentTimeMillis(),resultLocation);
                 notificationManager.notify(UPLOAD_ID,builder.build());
                 break;
         }
     }
 
-    private void update(final Context context, String rfId, int updateTime, String location){
+    private void update(final Context context, String rfId, long updateTime, final String location){
         Call<UpdateStudentResponse> call= Util.getRetrofitService().updateStudentDetail(rfId, updateTime, location);
         call.enqueue(new Callback<UpdateStudentResponse>() {
             @Override
@@ -80,6 +87,20 @@ public class Rfidreceiver extends BroadcastReceiver {
                 UpdateStudentResponse r=response.body();
                 if(r!=null&&response.isSuccess()){
                     Toast.makeText(context,r.getMessage(),Toast.LENGTH_LONG).show();
+                    if (location.equalsIgnoreCase("Home")){
+                        if(ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS)== PackageManager.PERMISSION_DENIED){
+
+                            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                                AppCompatActivity appCompatActivity= (AppCompatActivity) context;
+                                appCompatActivity.requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 121);
+                            }
+
+                            return;
+
+                        }
+                        SmsManager smsManager=SmsManager.getDefault();
+                        smsManager.sendTextMessage(r.getPhoneNumber(),null,"Your Ward Has Gone To Home",null,null);
+                    }
                 }
 
             }

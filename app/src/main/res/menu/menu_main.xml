@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ramola.vibhav.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:icon="@drawable/wifi"
+        android:id="@+id/action_connect"
         android:orderInCategory="100"
-        android:title="Update User"
-        app:showAsAction="never" />
+        android:title="Connect To HC-05"
+        app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/server"
+        android:id="@+id/action_record"
+        android:orderInCategory="50"
+        android:title="Connect To HC-05"
+        app:showAsAction="always" />
 </menu>

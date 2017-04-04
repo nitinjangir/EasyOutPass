@@ -9,13 +9,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by sahil on 30/3/17.
  */
 
-public class Student implements Parcelable {
-
-    @SerializedName("success")
-    private boolean success;
-
-    @SerializedName("message")
-    private String message;
+public class Student implements  Parcelable {
 
     @SerializedName("id")
     private int id;
@@ -39,7 +33,7 @@ public class Student implements Parcelable {
     private boolean isOut;
 
     @SerializedName("whenOut")
-    private int whenOut;
+    private long whenOut;
 
     @SerializedName("roomNo")
     private String roomNo;
@@ -48,11 +42,10 @@ public class Student implements Parcelable {
     private String location;
 
     @SerializedName("whenIn")
-    private int whenIn;
+    private long whenIn;
 
-    public Student(boolean success, String message, int id, String name, String rollNo, String phoneNumber, String rfId, String picUrl, boolean isOut, int whenOut, String roomNo, String location, int whenIn) {
-        this.success = success;
-        this.message = message;
+
+    public Student(int id, String name, String rollNo, String phoneNumber, String rfId, String picUrl, boolean isOut, long whenOut, String roomNo, String location, long whenIn) {
         this.id = id;
         this.name = name;
         this.rollNo = rollNo;
@@ -66,21 +59,51 @@ public class Student implements Parcelable {
         this.whenIn = whenIn;
     }
 
-    public boolean isSuccess() {
-        return success;
+    protected Student(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        rollNo = in.readString();
+        phoneNumber = in.readString();
+        rfId = in.readString();
+        picUrl = in.readString();
+        isOut = in.readByte() != 0;
+        whenOut = in.readLong();
+        roomNo = in.readString();
+        location = in.readString();
+        whenIn = in.readLong();
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(rollNo);
+        dest.writeString(phoneNumber);
+        dest.writeString(rfId);
+        dest.writeString(picUrl);
+        dest.writeByte((byte) (isOut ? 1 : 0));
+        dest.writeLong(whenOut);
+        dest.writeString(roomNo);
+        dest.writeString(location);
+        dest.writeLong(whenIn);
     }
 
-    public String getMessage() {
-        return message;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public static final Creator<Student> CREATOR = new Creator<Student>() {
+        @Override
+        public Student createFromParcel(Parcel in) {
+            return new Student(in);
+        }
+
+        @Override
+        public Student[] newArray(int size) {
+            return new Student[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -138,11 +161,11 @@ public class Student implements Parcelable {
         isOut = out;
     }
 
-    public int getWhenOut() {
+    public long getWhenOut() {
         return whenOut;
     }
 
-    public void setWhenOut(int whenOut) {
+    public void setWhenOut(long whenOut) {
         this.whenOut = whenOut;
     }
 
@@ -162,65 +185,11 @@ public class Student implements Parcelable {
         this.location = location;
     }
 
-    public int getWhenIn() {
+    public long getWhenIn() {
         return whenIn;
     }
 
-    public void setWhenIn(int whenIn) {
+    public void setWhenIn(long whenIn) {
         this.whenIn = whenIn;
     }
-
-    public static Creator<Student> getCREATOR() {
-        return CREATOR;
-    }
-
-    protected Student(Parcel in) {
-        success = in.readByte() != 0;
-        message = in.readString();
-        id = in.readInt();
-        name = in.readString();
-        rollNo = in.readString();
-        phoneNumber = in.readString();
-        rfId = in.readString();
-        picUrl = in.readString();
-        isOut = in.readByte() != 0;
-        whenOut = in.readInt();
-        roomNo = in.readString();
-        location = in.readString();
-        whenIn = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte((byte) (success ? 1 : 0));
-        dest.writeString(message);
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(rollNo);
-        dest.writeString(phoneNumber);
-        dest.writeString(rfId);
-        dest.writeString(picUrl);
-        dest.writeByte((byte) (isOut ? 1 : 0));
-        dest.writeInt(whenOut);
-        dest.writeString(roomNo);
-        dest.writeString(location);
-        dest.writeInt(whenIn);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Student> CREATOR = new Creator<Student>() {
-        @Override
-        public Student createFromParcel(Parcel in) {
-            return new Student(in);
-        }
-
-        @Override
-        public Student[] newArray(int size) {
-            return new Student[size];
-        }
-    };
 }

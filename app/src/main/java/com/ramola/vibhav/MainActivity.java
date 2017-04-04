@@ -88,10 +88,6 @@ private ProgressBar progressBar;
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(MainActivity.this,UpdateStudentActivity.class));
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -113,8 +109,6 @@ private ProgressBar progressBar;
                     Glide.with(MainActivity.this).load(student.getPicUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(userPic);
                 }
                 else {
-                    Snackbar.make(coordinatorLayout, student.getMessage(), Snackbar.LENGTH_LONG)
-                            .show();
                 }
             }
 

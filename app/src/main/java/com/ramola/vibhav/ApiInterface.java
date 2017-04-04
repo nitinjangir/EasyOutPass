@@ -28,6 +28,9 @@ public interface ApiInterface {
 
     @POST("student/update/{rfid}")
     @FormUrlEncoded
-    Call<UpdateStudentResponse> updateStudentDetail(@Path("rfid") String rfId,@Field("updateTime") int timeOfUpdate, @Field("location") String location);
+    Call<UpdateStudentResponse> updateStudentDetail(@Path("rfid") String rfId,@Field("updateTime") long timeOfUpdate, @Field("location") String location);
+
+    @GET("record/all")
+    Call<StudentListResponse> getAllRecordDetail();
 
 }

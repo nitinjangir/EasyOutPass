@@ -19,6 +19,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:layout_margin="10dp"
                 android:id="@+id/userPic"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
@@ -32,14 +33,15 @@
 
                 <TextView
                     android:id="@+id/userName"
-                    android:layout_width="265dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="4dp"
                     android:textAlignment="center"
                     android:textAppearance="@android:style/TextAppearance.Large" />
 
-               <TextView android:id="@+id/userRollNo"
+               <TextView
+                   android:id="@+id/userRollNo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -57,30 +59,35 @@
                     android:textAppearance="@android:style/TextAppearance.Medium" />
 
 
+
+
             </LinearLayout>
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userLocation"
+            android:textAlignment="center"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:padding="4dp"/>
 
         <TextView
+            android:textAlignment="center"
             android:id="@+id/inTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:layout_marginTop="10dp"
             android:text="In Time -"
             android:textAppearance="@android:style/TextAppearance.Medium" />
 
-
-
-
-
         <TextView
+            android:textAlignment="center"
             android:id="@+id/outTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            android:layout_marginTop="10dp"
             android:text="Out Time -"
             android:textAppearance="@android:style/TextAppearance.Medium" />
     </LinearLayout>

@@ -20,16 +20,21 @@ public class UpdateStudentResponse implements Parcelable {
     @SerializedName("rfId")
     private String rfId;
 
-    public UpdateStudentResponse(String message, boolean success, String rfId) {
+    @SerializedName("phoneNumber")
+    private String phoneNumber;
+
+    public UpdateStudentResponse(String message, boolean success, String rfId, String phoneNumber) {
         this.message = message;
         this.success = success;
         this.rfId = rfId;
+        this.phoneNumber = phoneNumber;
     }
 
     protected UpdateStudentResponse(Parcel in) {
         message = in.readString();
         success = in.readByte() != 0;
         rfId = in.readString();
+        phoneNumber = in.readString();
     }
 
     public static final Creator<UpdateStudentResponse> CREATOR = new Creator<UpdateStudentResponse>() {
@@ -43,6 +48,19 @@ public class UpdateStudentResponse implements Parcelable {
             return new UpdateStudentResponse[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(message);
+        dest.writeByte((byte) (success ? 1 : 0));
+        dest.writeString(rfId);
+        dest.writeString(phoneNumber);
+    }
 
     public String getMessage() {
         return message;
@@ -68,15 +86,15 @@ public class UpdateStudentResponse implements Parcelable {
         this.rfId = rfId;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(message);
-        dest.writeByte((byte) (success ? 1 : 0));
-        dest.writeString(rfId);
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public static Creator<UpdateStudentResponse> getCREATOR() {
+        return CREATOR;
     }
 }

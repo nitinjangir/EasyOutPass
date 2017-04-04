@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ramola.vibhav.Model.Student;
 import com.ramola.vibhav.Model.StudentListResponse;
@@ -30,6 +32,8 @@ public class StudentListActivity extends AppCompatActivity implements  SwipeRefr
     private ProgressBar progressBar;
     private StudentAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private boolean isShowingRecord = false;
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class StudentListActivity extends AppCompatActivity implements  SwipeRefr
         swipeRefreshLayout.setOnRefreshListener(this);
 
 
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
 
         }
@@ -70,6 +74,35 @@ public class StudentListActivity extends AppCompatActivity implements  SwipeRefr
                 if(swipeRefreshLayout.isRefreshing()){
                     swipeRefreshLayout.setRefreshing(false);
                 }
+                isShowingRecord=false;
+                progressBar.setVisibility(View.GONE);
+                StudentListResponse r=response.body();
+                if(r!=null&&response.isSuccess()){
+                    ArrayList<Student> list = response.body().getGetAllStudent();
+                    adapter.refresh(list);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StudentListResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
+
+    private void  getRecordDetail(){
+        Call<StudentListResponse> call = Util.getRetrofitService().getAllRecordDetail();
+        call.enqueue(new Callback<StudentListResponse>() {
+            @Override
+            public void onResponse(Call<StudentListResponse> call, Response<StudentListResponse> response) {
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                isShowingRecord=true;
                 progressBar.setVisibility(View.GONE);
                 StudentListResponse r=response.body();
                 if(r!=null&&response.isSuccess()){
@@ -110,9 +143,18 @@ public class StudentListActivity extends AppCompatActivity implements  SwipeRefr
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this,BluetoothDeviceActivity.class));
-            return true;
+        if(id==R.id.action_connect){
+            if(mBluetoothAdapter.isEnabled()){
+            Intent i =new Intent(StudentListActivity.this,ClientThread.class);
+            i.putExtra(ClientThread.ADDRESS,"30:14:12:23:15:13");
+            startService(i);}
+            else {
+                Toast.makeText(this,"Please Enable The Bluetooth",Toast.LENGTH_LONG).show();
+            }
+        }
+        else if(id==R.id.action_record){
+            progressBar.setVisibility(View.VISIBLE);
+            getRecordDetail();
         }
 
         return super.onOptionsItemSelected(item);
@@ -120,6 +162,11 @@ public class StudentListActivity extends AppCompatActivity implements  SwipeRefr
 
     @Override
     public void onRefresh() {
+
+        if(isShowingRecord){
+            getRecordDetail();
+        }
+        else
         getDetail();
     }
 }

@@ -8,9 +8,12 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -80,11 +83,14 @@ public class ClientThread extends IntentService {
 
     private  void  recieveData(InputStream inputStream){
         byte[] buffer = new byte[1024];
-        int bytes;
+       int bytes;
+
         while (true){
             try {
+              Log.d("data1234567890","Data id recieving");
                 bytes = inputStream.read(buffer);
                 String strReceived = new String(buffer, 0, bytes);
+
                 Intent i =new Intent(Rfidreceiver.RFidrecrive);
                 i.putExtra(Rfidreceiver.Rfid,strReceived);
                 sendBroadcast(i);
